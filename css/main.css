@@ -17,21 +17,27 @@ a:hover {
 
 /* Content */
 main {
-   text-align: center;
-   padding-top: 5%;
-   width: 70%;
+   position: fixed;
+   width: 100%;
+   top: 0px;
+   bottom: 150px;
+   clear: both;
    margin: auto;
+   padding-top: 5%;
+
+   text-align: center;
 }
 
 #mainCanvas {
-   width: 600px;
-   height: 700px;
+   /* 4:5 aspect ratio */
+   width: 80%;
+   height: 100%;
    background-color: #222;
 }
 
 /* Bottom controls */
 #controls {
-   width: 70%;
+   width: 100%;
    text-align: center;
    position: fixed;
    bottom: 0;
