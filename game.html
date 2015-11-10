@@ -14,13 +14,15 @@
   		<![endif]-->
 
 		<!-- Site scripts -->
-		<script src="js/ui.js"></script>
+		<script src="scripts/ui.js"></script>
 	</head>
 
 	<body>
+		<div id="gray_overlay"></div>
+
 		<main>
 			<canvas id="mainCanvas"></canvas>
-			
+
 			<div id="controls">
 				<img src="images/prev.svg" id="icon_prev" alt="Previous level" />
 				<img src="images/sound.svg" id="icon_sound" alt="Enable/disable sounds" />
@@ -29,10 +31,12 @@
 			</div>
 
 			<div id="credits_overlay">
-				<span>Icons are downloaded from <a href="http://flaticon.com">flaticon.com</a> and created by:</span>
+				<img src="images/close.png" id="close_credits" alt="Close window" onClick="closeCredits();" />
+				<h2>Infinity Loop</h2>
+				<span>All icons are downloaded from <a href="http://flaticon.com">flaticon.com</a> and created by:</span>
 				<ul>
 					<li><a href="http://www.flaticon.com/authors/freepik">Freepik</a></li>
-					<li><a href="http://www.flaticon.com/authors/google">Google</a></li>l
+					<li><a href="http://www.flaticon.com/authors/google">Google</a></li>
 				</ul>
 			</div>
 		</main>
@@ -41,7 +45,7 @@
 			<span>
 				Programmed by <a href="https://github.com/aso824">aso824</a>&nbsp;|&nbsp;
 				Idea by <a href="https://play.google.com/store/apps/developer?id=Balys+Valentukevicius">Balys Valentukevicius</a>&nbsp;|&nbsp;
-				<a href="#" onClick="preventDefault();">Other credits</a>
+				<a href="#" onClick="showCredits();">Other credits</a>
 			</span>
 		</footer>
 	</body>
