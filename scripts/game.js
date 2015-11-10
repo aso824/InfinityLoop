@@ -69,7 +69,6 @@ function drawCurrentLevel(c, ctx) {
    ctx.clearRect(0, 0, cW, cH);
 
    // Draw test
-   ctx.beginPath();
    for (var x = 1; x <= cW; x++) {
       for (var y = 1; y <= cH; y++) {
          var pos = {
@@ -77,10 +76,10 @@ function drawCurrentLevel(c, ctx) {
             y: y * tileH - (tileH / 2)
          }
 
-
+         ctx.beginPath();
          ctx.arc(pos.x, pos.y, (tileW > tileH ? tileH : tileW) / 2 - 5, 0, 2 * Math.PI);
+         ctx.stroke();
       }
    }
-   ctx.stroke();
 
 }
