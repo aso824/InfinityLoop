@@ -1,0 +1,51 @@
+/* General styles */
+html, body {
+   margin: 0;
+   padding: 0;
+   background-color: #333;
+   text-color: #777;
+}
+
+a {
+   text-decoration: none;
+   color: #777;
+}
+
+a:hover {
+   text-decoration: underline;
+}
+
+/* Content */
+main {
+
+}
+
+/* Bottom controls */
+#controls {
+
+}
+
+#controls img {
+   width: 32px;
+   height: 32px;
+   margin: 8px;
+}
+
+/* Footer */
+footer {
+   clear: both;
+   position: fixed;
+   bottom: 0;
+   text-align: center;
+   width: 100%;
+   margin: 0 0 10px 0;
+
+   color: #555;
+   font-size: 0.8em;
+}
+
+/* Credits overlay box */
+#credits_overlay {
+   display: none;
+   border: 1px solid gray;
+}
