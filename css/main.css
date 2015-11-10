@@ -19,24 +19,26 @@ a:hover {
 main {
    text-align: center;
    padding-top: 5%;
-   width: 100%;
+   width: 70%;
+   margin: auto;
 }
 
 #mainCanvas {
-   width: 70%;
-   height: 45%;
+   width: 600px;
+   height: 700px;
    background-color: #222;
 }
 
 /* Bottom controls */
 #controls {
-   width: 100%;
+   width: 70%;
    text-align: center;
    position: fixed;
    bottom: 0;
    margin: 0 0 50px 0;
 }
 
+/*
 #controls #icon_prev {
    display: none;
 }
@@ -47,7 +49,7 @@ main {
 
 #controls #icon_restart {
    display: none;
-}
+}*/
 
 #controls img {
    width: 48px;
