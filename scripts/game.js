@@ -1,3 +1,9 @@
+// Game configuration
+var mapConfig = {
+   width: 8,
+   height: 10
+};
+
 // Main game variables
 var currentLevel = 1;
 
@@ -7,7 +13,8 @@ $(document).ready(function() {
    var c = $('#mainCanvas')[0];
    var ctx = c.getContext('2d');
 
-   drawCurrentLevel();
+   // Draw level
+   drawCurrentLevel(c, ctx);
 })
 
 /*
@@ -46,7 +53,34 @@ function getLevel(levelNum) {
    Function for drawing current level
    Should be called after document.ready
 */
-function drawCurrentLevel() {
+function drawCurrentLevel(c, ctx) {
    // Get current level to draw
    var level = getLevel(currentLevel);
+
+   // Get canvas dimensions
+   var cW = c.width;
+   var cH = c.height;
+
+   // Calculate tile size
+   var tileW = cW / mapConfig.width;
+   var tileH = cH / mapConfig.height;
+
+   // Clear context
+   ctx.clearRect(0, 0, cW, cH);
+
+   // Draw test
+   ctx.beginPath();
+   for (var x = 1; x <= cW; x++) {
+      for (var y = 1; y <= cH; y++) {
+         var pos = {
+            x: x * tileW - (tileW / 2),
+            y: y * tileH - (tileH / 2)
+         }
+
+
+         ctx.arc(pos.x, pos.y, (tileW > tileH ? tileH : tileW) / 2 - 5, 0, 2 * Math.PI);
+      }
+   }
+   ctx.stroke();
+
 }

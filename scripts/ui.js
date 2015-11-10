@@ -29,9 +29,16 @@ function closeCredits() {
 }
 
 function resizeCanvas() {
-   // Set canvas dimensions to keep aspect ratio
-   $('#mainCanvas').css('width', $('main').height() / 5 * 4);
-   $('#mainCanvas').css('height', $('main').height());
+   // Calculate canvas dimensions to keep aspect ratio
+   var w = $('main').height() / 5 * 4;
+   var h = $('main').height();
+
+   $('#mainCanvas').css('width', w);
+   $('#mainCanvas').css('height', h);
+
+   var ctx = $('#mainCanvas')[0].getContext('2d');
+   ctx.canvas.width = w;
+   ctx.canvas.height = h;
 }
 
 // All bindings when document ready
@@ -42,5 +49,6 @@ $(document).ready(function() {
    // Auto resize canvas to keep aspect ratio
    $(window).resize(function() {
       resizeCanvas();
+      drawCurrentLevel($('#mainCanvas')[0], $('#mainCanvas')[0].getContext('2d'));
    });
 })
