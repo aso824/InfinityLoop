@@ -2,8 +2,8 @@
 html, body {
    margin: 0;
    padding: 0;
-   background-color: #333;
-   text-color: #777;
+   background-color: #CCC;
+   color: #BBB;
 }
 
 a {
@@ -32,7 +32,7 @@ main {
    /* 4:5 aspect ratio */
    width: 80%;
    height: 100%;
-   background-color: #222;
+   background-color: #AAA;
 }
 
 /* Bottom controls */
@@ -85,13 +85,12 @@ footer {
    top: 20%;
    left: 20%;
 
-   border: 2px solid #444;
    background-color: #333;
    border: 1px solid gray;
+   border-radius: 3px;
 
    padding: 15px;
    text-align: left;
-   color: #999;
 
    display: none;
 }

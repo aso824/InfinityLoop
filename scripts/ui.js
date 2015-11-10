@@ -2,6 +2,20 @@ function showCredits() {
    // Show gray overlay
    $('#gray_overlay').css('display', 'block');
 
+   // Set colors correct for current body bg
+   var boxBg   = '#CCC';
+   var boxFont = '#333';
+   var boxLink = '#444';
+   if ($('body').css('background-color') != 'rgb(204, 204, 204)') { // RGB equivalent for #CCC
+      boxBg    = '#333';
+      boxFont  = '#999';
+      boxLink  = '#CCC';
+   }
+
+   $('#credits_overlay').css('background-color', boxBg)
+                        .css('color', boxFont);
+   $('#credits_overlay a').css('color', boxLink);
+
    // Show credits box
    $('#credits_overlay').css('display', 'block');
 }
