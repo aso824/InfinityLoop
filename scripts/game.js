@@ -62,24 +62,12 @@ function drawCurrentLevel(c, ctx) {
    var cH = c.height;
 
    // Calculate tile size
-   var tileW = cW / mapConfig.width;
-   var tileH = cH / mapConfig.height;
+   var tileW = parseInt(cW / mapConfig.width);
+   var tileH = parseInt(cH / mapConfig.height);
+
+   console.log(tileW + " ," + tileH);
 
    // Clear context
    ctx.clearRect(0, 0, cW, cH);
-
-   // Draw test
-   for (var x = 1; x <= cW; x++) {
-      for (var y = 1; y <= cH; y++) {
-         var pos = {
-            x: x * tileW - (tileW / 2),
-            y: y * tileH - (tileH / 2)
-         }
-
-         ctx.beginPath();
-         ctx.arc(pos.x, pos.y, (tileW > tileH ? tileH : tileW) / 2 - 5, 0, 2 * Math.PI);
-         ctx.stroke();
-      }
-   }
 
 }

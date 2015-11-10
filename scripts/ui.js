@@ -30,7 +30,7 @@ function closeCredits() {
 
 function resizeCanvas() {
    // Calculate canvas dimensions to keep aspect ratio
-   var w = $('main').height() / 5 * 4;
+   var w = parseInt($('main').height() / 5 * 4);
    var h = $('main').height();
 
    $('#mainCanvas').css('width', w);
