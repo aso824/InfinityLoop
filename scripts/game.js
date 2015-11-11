@@ -70,8 +70,8 @@ function getLevel(levelNum) {
                [0, 2, 1]
             ],
       dimensions: {
-         x: 3,
-         y: 3
+         width: 3,
+         height: 3
       }
    }
 
@@ -98,10 +98,14 @@ function drawCurrentLevel() {
    // Clear context
    ctx.clearRect(0, 0, cW, cH);
 
+   // Internal margins/paddings to center all tiles
+   var marginTop  = parseInt((mapConfig.height - level.dimensions.width) / 2) * parseInt(tileH * 1.25);
+   var marginLeft = parseInt((mapConfig.width - level.dimensions.height) / 2) * parseInt(tileW * 1.25);
+
    // Draw level
    var objToDraw;
-   for (var i = 0; i < level.dimensions.y; i++) {
-      for (var j = 0; j < level.dimensions.x; j++) {
+   for (var i = 0; i < level.dimensions.height; i++) {
+      for (var j = 0; j < level.dimensions.width; j++) {
          // Skip empty fields
          if (level.data[i][j] == 0)
             continue;
@@ -116,10 +120,8 @@ function drawCurrentLevel() {
             default: break;
          }
 
-         // Scale
-
-         // Draw
-         ctx.drawImage(objToDraw, j * tileW, i * tileH, tileW, tileH);
+         // Draw tile
+         ctx.drawImage(objToDraw, marginLeft + j * tileW, marginTop + i * tileH, tileW, tileH);
       }
    }
 }
