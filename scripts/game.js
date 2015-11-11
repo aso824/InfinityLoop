@@ -22,6 +22,8 @@ var tilesObj = {
 /* Graphic (canvas) variables and objects */
 var c;
 var ctx;
+var tileW;
+var tileH;
 var marginTop  = 0;
 var marginLeft = 0;
 
@@ -33,6 +35,31 @@ $(document).ready(function() {
 
    // Load SVG tiles - this will call startGame() when ready
    loadTiles();
+
+   // Bind mouse
+   $('#mainCanvas').click(function (e) {
+      // Mouse coordinates
+      var mouseX = parseInt(e.pageX - $(this).offset().left);
+      var mouseY = parseInt(e.pageY - $(this).offset().top);
+
+      // Restrict click on tiles area
+      if (mouseX < marginLeft - (tileW / 2))
+         return;
+      if (mouseX > marginLeft + (tileW) * (levelObj.dimensions.width - 1) + (tileW / 2))
+         return;
+
+      if (mouseY < marginTop - (tileH / 2))
+         return;
+      if (mouseY > marginTop + (tileH) * (levelObj.dimensions.height - 1) + (tileH / 2))
+         return;
+
+      // Calculating clicked tile
+      var tileX = parseInt( (mouseX - marginLeft + (tileW / 2)) / tileW);
+      var tileY = parseInt( (mouseY - marginTop + (tileH / 2)) / tileH);
+
+      // Call function
+      rotateTile(tileX, tileY);
+   });
 })
 
 /*
@@ -55,7 +82,7 @@ function startGame() {
 
 /*
    Function for getting requested level
-   In future, this will return map from cache
+   In future, this will download map via XHR or return from cache
 */
 
 function getLevel(levelNum) {
@@ -108,8 +135,8 @@ function drawCurrentLevel() {
    var cH = c.height;
 
    // Calculate tile size
-   var tileW = parseInt(cW / mapConfig.width);
-   var tileH = parseInt(cH / mapConfig.height);
+   tileW = parseInt(cW / mapConfig.width);
+   tileH = parseInt(cH / mapConfig.height);
 
    // Clear context
    ctx.clearRect(0, 0, cW, cH);
@@ -126,33 +153,41 @@ function drawCurrentLevel() {
          if (levelObj.data[i][j] == 0)
             continue;
 
-         // Prepare object to draw
-         switch (levelObj.data[i][j]) {
-            case 1: objToDraw = tilesObj.endpoint; break;
-            case 2: objToDraw = tilesObj.curve; break;
-            case 3: objToDraw = tilesObj.way3; break;
-            case 4: objToDraw = tilesObj.way4; break;
-            case 5: objToDraw = tilesObj.straight; break;
-            default: break;
-         }
-
          // Rotate, 1.57.. radians is 90 degrees
-         var angle = rotateState[i][j] * 1.57079633;
+         var angle = rotateState[i][j] * Math.PI/2;
 
-         // Save context
-         ctx.save();
-
-         // Move (translate) and rotate
-         ctx.translate(marginLeft + j * tileW, marginTop + i * tileH);
-         ctx.rotate(angle);
-
-         // Draw image
-         ctx.drawImage(objToDraw, - parseInt(tileW / 2), - parseInt(tileH / 2), tileW, tileH);
-
-         // Restore previous context
-         ctx.restore();
+         // Draw tile
+         drawTile(j, i, angle);
       }
    }
+}
+
+/*
+   Rotating tiles on click
+   @x, @y - position in array, not mouse position
+*/
+function rotateTile(x, y) {
+   // Check tile
+   if (levelObj.data[y][x] == 0)
+      return;
+
+   // Rotate by 90 degree, 1.57... is in radians
+   rotateState[y][x] += 1;
+   if (rotateState[y][x] > 3)
+      rotateState[y][x] = 0;
+
+   var angle = rotateState[y][x] * Math.PI/2;
+
+   // Clear area
+   var area = {
+      x: marginLeft + (x * tileW) - (tileW / 2),
+      y: marginTop + (y * tileH) - (tileH / 2)
+   };
+
+   ctx.clearRect(area.x, area.y, tileW, tileH);
+
+   // Draw tile
+   drawTile(x, y, angle);
 }
 
 /* Loading SVG images into tiles object */
@@ -178,4 +213,33 @@ function loadTiles() {
          startGame();
       });
    };
+}
+
+/*
+   Draw rotated tile on context
+*/
+
+function drawTile(posX, posY, angle) {
+   // Prepare object to draw
+   switch (levelObj.data[posY][posX]) {
+      case 1: objToDraw = tilesObj.endpoint; break;
+      case 2: objToDraw = tilesObj.curve; break;
+      case 3: objToDraw = tilesObj.way3; break;
+      case 4: objToDraw = tilesObj.way4; break;
+      case 5: objToDraw = tilesObj.straight; break;
+      default: break;
+   }
+
+   // Save context
+   ctx.save();
+
+   // Move (translate) and rotate
+   ctx.translate(marginLeft + posX * tileW, marginTop + posY * tileH);
+   ctx.rotate(angle);
+
+   // Draw image
+   ctx.drawImage(objToDraw, - parseInt(tileW / 2), - parseInt(tileH / 2), tileW, tileH);
+
+   // Restore previous context
+   ctx.restore();
 }
