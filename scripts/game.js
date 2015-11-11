@@ -171,23 +171,34 @@ function rotateTile(x, y) {
    if (levelObj.data[y][x] == 0)
       return;
 
-   // Rotate by 90 degree, 1.57... is in radians
-   rotateState[y][x] += 1;
-   if (rotateState[y][x] > 3)
-      rotateState[y][x] = 0;
-
    var angle = rotateState[y][x] * Math.PI/2;
 
-   // Clear area
+   // Rotate by 90 degree, 1.57... is in radians
+   rotateState[y][x] += 1;
+
+   var angleEnd = rotateState[y][x] * Math.PI/2;
+
+   // Area to clear
    var area = {
       x: marginLeft + (x * tileW) - (tileW / 2),
       y: marginTop + (y * tileH) - (tileH / 2)
    };
 
-   ctx.clearRect(area.x, area.y, tileW, tileH);
+   // Animation
+   $({ angle: angle}).animate({angle: angleEnd}, {
+      duration: 250,
+      step: function(now, fx) {
+         // Clear area
+         ctx.clearRect(area.x, area.y, tileW, tileH);
 
-   // Draw tile
-   drawTile(x, y, angle);
+         // Draw tile
+         drawTile(x, y, now);
+      }
+   });
+
+   // Protect rotateState to have less than 4
+   if (rotateState[y][x] > 3)
+      rotateState[y][x] = 0;
 }
 
 /* Loading SVG images into tiles object */
