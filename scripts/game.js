@@ -6,6 +6,8 @@ var mapConfig = {
 
 /* Main game variables */
 var currentLevel = 1;
+var levelObj = {};
+var rotateState = [];
 
 /* SVG images */
 var tilesObj = {
@@ -17,11 +19,13 @@ var tilesObj = {
    straight:      new Image()
 };
 
-/* HTML objects */
+/* Graphic (canvas) variables and objects */
 var c;
 var ctx;
+var marginTop  = 0;
+var marginLeft = 0;
 
-// Run when ready
+/* Run game */
 $(document).ready(function() {
    // Get canvas
    c = $('#mainCanvas')[0];
@@ -36,9 +40,14 @@ $(document).ready(function() {
 */
 
 function startGame() {
+   // Wait for all tiles to load
    if (tilesObj.readyState != 5)
       return;
 
+   // Load level
+   getLevel(currentLevel);
+
+   // Draw first frame
    drawCurrentLevel();
 
    console.log('Resources loaded, game started.');
@@ -75,8 +84,18 @@ function getLevel(levelNum) {
       }
    }
 
-   // Return result
-   return level;
+   // Random tiles rotation
+   rotateState = [];
+   for (var i = 0; i < level.dimensions.height; i++) {
+      rotateState[i] = [];
+      for (var j = 0; j < level.dimensions.width; j++) {
+         // Get random rotation from 0 to 3
+         rotateState[i][j] = Math.floor(Math.random() * 4);
+      }
+   }
+
+   // Save result
+   levelObj = level;
 }
 
 /*
@@ -84,9 +103,6 @@ function getLevel(levelNum) {
    Should be called after document.ready
 */
 function drawCurrentLevel() {
-   // Get current level to draw
-   var level = getLevel(currentLevel);
-
    // Get canvas dimensions
    var cW = c.width;
    var cH = c.height;
@@ -99,19 +115,19 @@ function drawCurrentLevel() {
    ctx.clearRect(0, 0, cW, cH);
 
    // Internal margins/paddings to center all tiles
-   var marginTop  = parseInt((mapConfig.height - level.dimensions.width) / 2) * parseInt(tileH * 1.25);
-   var marginLeft = parseInt((mapConfig.width - level.dimensions.height) / 2) * parseInt(tileW * 1.25);
+   marginTop  = parseInt((mapConfig.height - levelObj.dimensions.width) / 2) * parseInt(tileH * 1.25);
+   marginLeft = parseInt((mapConfig.width - levelObj.dimensions.height) / 2) * parseInt(tileW * 1.5);
 
    // Draw level
    var objToDraw;
-   for (var i = 0; i < level.dimensions.height; i++) {
-      for (var j = 0; j < level.dimensions.width; j++) {
+   for (var i = 0; i < levelObj.dimensions.height; i++) {
+      for (var j = 0; j < levelObj.dimensions.width; j++) {
          // Skip empty fields
-         if (level.data[i][j] == 0)
+         if (levelObj.data[i][j] == 0)
             continue;
 
          // Prepare object to draw
-         switch (level.data[i][j]) {
+         switch (levelObj.data[i][j]) {
             case 1: objToDraw = tilesObj.endpoint; break;
             case 2: objToDraw = tilesObj.curve; break;
             case 3: objToDraw = tilesObj.way3; break;
@@ -120,8 +136,21 @@ function drawCurrentLevel() {
             default: break;
          }
 
-         // Draw tile
-         ctx.drawImage(objToDraw, marginLeft + j * tileW, marginTop + i * tileH, tileW, tileH);
+         // Rotate, 1.57.. radians is 90 degrees
+         var angle = rotateState[i][j] * 1.57079633;
+
+         // Save context
+         ctx.save();
+
+         // Move (translate) and rotate
+         ctx.translate(marginLeft + j * tileW, marginTop + i * tileH);
+         ctx.rotate(angle);
+
+         // Draw image
+         ctx.drawImage(objToDraw, - parseInt(tileW / 2), - parseInt(tileH / 2), tileW, tileH);
+
+         // Restore previous context
+         ctx.restore();
       }
    }
 }
