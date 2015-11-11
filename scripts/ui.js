@@ -51,4 +51,7 @@ $(document).ready(function() {
       resizeCanvas();
       drawCurrentLevel($('#mainCanvas')[0], $('#mainCanvas')[0].getContext('2d'));
    });
+
+   // Disable selecting on canvas
+   $('#mainCanvas').on('selectstart', false);
 })
