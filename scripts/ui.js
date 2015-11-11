@@ -33,6 +33,12 @@ function resizeCanvas() {
    var w = parseInt($('main').height() / 5 * 4);
    var h = $('main').height();
 
+   // 1-pixel fix
+   if (w % 2 != 0)
+      w += 1;
+   if (h % 2 == 0)
+      h += 1;
+
    $('#mainCanvas').css('width', w);
    $('#mainCanvas').css('height', h);
 
