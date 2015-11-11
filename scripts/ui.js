@@ -60,4 +60,9 @@ $(document).ready(function() {
 
    // Disable selecting on canvas
    $('#mainCanvas').on('selectstart', false);
+
+   // Restart button
+   $('#icon_restart').click(function() {
+      restartLevel();
+   });
 })

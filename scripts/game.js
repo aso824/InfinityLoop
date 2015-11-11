@@ -163,6 +163,26 @@ function drawCurrentLevel() {
 }
 
 /*
+   Restarts level
+   Randomize all tiles and redraw
+*/
+
+function restartLevel() {
+   // Random tiles rotation
+   rotateState = [];
+   for (var i = 0; i < levelObj.dimensions.height; i++) {
+      rotateState[i] = [];
+      for (var j = 0; j < levelObj.dimensions.width; j++) {
+         // Get random rotation from 0 to 3
+         rotateState[i][j] = Math.floor(Math.random() * 4);
+      }
+   }
+
+   // Redraw
+   drawCurrentLevel();
+}
+
+/*
    Rotating tiles on click
    @x, @y - position in array, not mouse position
 */
