@@ -224,8 +224,6 @@ function rotateTile(x, y) {
    var checkState = checkLevel();
    if (checkState == true) {
       //alert('Level complete');
-   } else {
-      console.log('Level checking failed on ' + checkState.px + ', ' + checkState.py);
    }
 }
 
@@ -362,29 +360,29 @@ function checkLevel() {
       for (var x = 0; x < levelObj.dimensions.width; x++) {
          // Special cases for tiles on border
          if (y == 0 && sides[y][x][0] == true)
-            return {px: x, py: y};
+            return false;
          if (y == levelObj.dimensions.height - 1 && sides[y][x][2] == true)
-            return {px: x, py: y};
+            return false;
          if (x == 0 && sides[y][x][3] == true)
-            return {px: x, py: y};
+            return false;
          if (x == levelObj.dimensions.width - 1 && sides[y][x][1] == true)
-            return {px: x, py: y};
+            return false;
 
          // Top
          if (y > 0 && sides[y][x][0] != sides[y - 1][x][2])
-            return {px: x, py: y};
+            return false;
 
          // Down
          if (y < levelObj.dimensions.height - 1 && sides[y][x][2] != sides[y + 1][x][0])
-            return {px: x, py: y};
+            return false;
 
          // Left
          if (x > 0 && sides[y][x][3] != sides[y][x - 1][1])
-            return {px: x, py: y};
+            return false;
 
          // Right
          if (x < levelObj.dimensions.width - 1 && sides[y][x][1] != sides[y][x + 1][3])
-            return {px: x, py: y};
+            return false;
       }
    }
 
