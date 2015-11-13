@@ -219,6 +219,14 @@ function rotateTile(x, y) {
    // Protect rotateState to have less than 4
    if (rotateState[y][x] > 3)
       rotateState[y][x] = 0;
+
+   // Call checkLevel() after every rotation
+   var checkState = checkLevel();
+   if (checkState == true) {
+      //alert('Level complete');
+   } else {
+      console.log('Level checking failed on ' + checkState.px + ', ' + checkState.py);
+   }
 }
 
 /* Loading SVG images into tiles object */
@@ -332,4 +340,55 @@ function getConnSides(x, y) {
          reply = [false, true, false, true];
       return reply;
    }
+}
+
+/*
+   Checking current level
+   @return bool - is level solved correctly
+*/
+
+function checkLevel() {
+   // Generate array of all tiles connection sides
+   var sides = [];
+   for (var y = 0; y < levelObj.dimensions.width; y++) {
+      sides[y] = [];
+      for (var x = 0; x < levelObj.dimensions.height; x++) {
+         sides[y][x] = getConnSides(x, y);
+      }
+   }
+
+   // Validate all tiles
+   for (var y = 0; y < levelObj.dimensions.height; y++) {
+      for (var x = 0; x < levelObj.dimensions.width; x++) {
+         // Special cases for tiles on border
+         if (y == 0 && sides[y][x][0] == true)
+            return {px: x, py: y};
+         if (y == levelObj.dimensions.height - 1 && sides[y][x][2] == true)
+            return {px: x, py: y};
+         if (x == 0 && sides[y][x][3] == true)
+            return {px: x, py: y};
+         if (x == levelObj.dimensions.width - 1 && sides[y][x][1] == true)
+            return {px: x, py: y};
+
+         // Top
+         if (y > 0 && sides[y][x][0] != sides[y - 1][x][2])
+            return {px: x, py: y};
+
+         // Down
+         if (y < levelObj.dimensions.height - 1 && sides[y][x][2] != sides[y + 1][x][0])
+            return {px: x, py: y};
+
+         // Left
+         if (x > 0 && sides[y][x][3] != sides[y][x - 1][1])
+            return {px: x, py: y};
+
+         // Right
+         if (x < levelObj.dimensions.width - 1 && sides[y][x][1] != sides[y][x + 1][3])
+            return {px: x, py: y};
+      }
+   }
+
+   // If no error occured, level is complete
+   console.log('checkLevel(): level complete');
+   return true;
 }
