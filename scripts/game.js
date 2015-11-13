@@ -274,3 +274,62 @@ function drawTile(posX, posY, angle) {
    // Restore previous context
    ctx.restore();
 }
+
+/*
+   Function tells which sides are connections of given tile
+*/
+
+function getConnSides(x, y) {
+   var tileType = levelObj.data[y][x];
+   var rotation = rotateState[y][x];
+   var reply = [false, false, false, false];
+
+   // Empty space
+   if (tileType == 0)
+      return reply;
+
+   // End point
+   if (tileType == 1) {
+      reply[rotation] = true;
+      return reply;
+   }
+
+   // Curve
+   if (tileType == 2) {
+      switch (rotation) {
+         case 0: reply = [true, true, false, false]; break;
+         case 1: reply = [false, true, true, false]; break;
+         case 2: reply = [false, false, true, true]; break;
+         case 3: reply = [true, false, false, true]; break;
+      }
+
+      return reply;
+   }
+
+   // 3-way connector
+   if (tileType == 3) {
+      switch (rotation) {
+         case 0: reply = [true, true, true, false]; break;
+         case 1: reply = [false, true, true, true]; break;
+         case 2: reply = [true, false, true, true]; break;
+         case 3: reply = [true, true, false, true]; break;
+      }
+
+      return reply;
+   }
+
+   // 4-way connector
+   if (tileType == 4) {
+      reply = [true, true, true, true];
+      return reply;
+   }
+
+   // Straight line
+   if (tileType == 5) {
+      if (rotation == 0 || rotation == 2)
+         reply = [true, false, true, false];
+      else
+         reply = [false, true, false, true];
+      return reply;
+   }
+}

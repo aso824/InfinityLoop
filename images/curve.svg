@@ -14,7 +14,7 @@
    id="svg4331"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="Nowy dokument 7">
+   sodipodi:docname="curve.svg">
   <defs
      id="defs4333" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="136.41652"
-     inkscape:cy="170.28075"
+     inkscape:zoom="15.839192"
+     inkscape:cx="255.75237"
+     inkscape:cy="136.21218"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,7 +61,7 @@
        sodipodi:rx="128.21428"
        sodipodi:ry="127.85714"
        d="M 256.42856,128.14285 A 128.21428,127.85714 0 0 1 128.21428,255.99999"
-       transform="translate(-128.00028,668.56219)"
+       transform="matrix(0,1,-1,0,384.39256,668.01262)"
        sodipodi:start="0"
        sodipodi:end="1.5707963"
        sodipodi:open="true" />
