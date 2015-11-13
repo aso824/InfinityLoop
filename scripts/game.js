@@ -95,6 +95,7 @@ function getLevel(levelNum) {
    // Check if level is in cache
    if (typeof allLevels[levelNum] !== "undefined") {
       levelObj = allLevels[levelNum];
+      randomizeRotation();
       levelReady();
    } else {   // If not, get suitable file with levels
       // Calculate filename
@@ -120,14 +121,7 @@ function getLevel(levelNum) {
          levelObj = allLevels[levelNum];
 
          // Random tiles rotation
-         rotateState = [];
-         for (var i = 0; i < levelObj.dimensions.height; i++) {
-            rotateState[i] = [];
-            for (var j = 0; j < levelObj.dimensions.width; j++) {
-               // Get random rotation from 0 to 3
-               rotateState[i][j] = Math.floor(Math.random() * 4);
-            }
-         }
+         randomizeRotation();
 
          // Call appropriate function
          levelReady();
@@ -155,8 +149,8 @@ function drawCurrentLevel() {
    ctx.clearRect(0, 0, cW, cH);
 
    // Internal margins/paddings to center all tiles
-   marginTop  = parseInt((mapConfig.height - levelObj.dimensions.width) / 2) * parseInt(tileH * 1.25);
-   marginLeft = parseInt((mapConfig.width - levelObj.dimensions.height) / 2) * parseInt(tileW * 1.5);
+   marginTop  = parseInt((mapConfig.height - levelObj.dimensions.height) / 2) * parseInt(tileH * 1.25);
+   marginLeft = parseInt((mapConfig.width - levelObj.dimensions.width) / 2) * parseInt(tileW * 1.5);
 
    // Draw level
    var objToDraw;
@@ -176,13 +170,14 @@ function drawCurrentLevel() {
 }
 
 /*
-   Restarts level
-   Randomize all tiles and redraw
+   Randomize tiles rotation
 */
 
-function restartLevel() {
-   // Random tiles rotation
+function randomizeRotation() {
+   // Clear array
    rotateState = [];
+
+   // Iterate
    for (var i = 0; i < levelObj.dimensions.height; i++) {
       rotateState[i] = [];
       for (var j = 0; j < levelObj.dimensions.width; j++) {
@@ -190,6 +185,16 @@ function restartLevel() {
          rotateState[i][j] = Math.floor(Math.random() * 4);
       }
    }
+}
+
+/*
+   Restarts level
+   Randomize all tiles and redraw
+*/
+
+function restartLevel() {
+   // Randomize tiles rotation
+   randomizeRotation();
 
    // Redraw
    drawCurrentLevel();
@@ -203,7 +208,6 @@ function rotateTile(x, y) {
    // Check tile
    if (levelObj.data[y][x] == 0)
       return;
-
    var angle = rotateState[y][x] * Math.PI/2;
 
    // Rotate by 90 degree, 1.57... is in radians
