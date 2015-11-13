@@ -1,0 +1,22 @@
+{"levels":[
+	{
+		"data": [
+			[2, 3, 2],
+			[2, 3, 2]
+		],
+		"dimensions": {
+			"width": 3,
+			"height": 2
+		}
+	},
+	{
+		"data": [
+			[2, 2, 2, 2],
+			[2, 2, 2, 2]
+		],
+		"dimensions": {
+			"width": 4,
+			"height": 2
+		}
+	}
+]}

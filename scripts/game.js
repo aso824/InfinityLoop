@@ -5,7 +5,8 @@ var mapConfig = {
 };
 
 /* Main game variables */
-var currentLevel = 1;
+var currentLevel = 0;
+var allLevels = [];
 var levelObj = {};
 var rotateState = [];
 
@@ -74,55 +75,67 @@ function startGame() {
    // Load level
    getLevel(currentLevel);
 
-   // Draw first frame
-   drawCurrentLevel();
-
    console.log('Resources loaded, game started.');
 }
 
 /*
+   This function is called when level is downloaded
+*/
+
+function levelReady() {
+   // Draw level
+   drawCurrentLevel();
+}
+
+/*
    Function for getting requested level
-   In future, this will download map via XHR or return from cache
 */
 
 function getLevel(levelNum) {
-   // Temporary lock
-   if (levelNum != 1)
-      return;
+   // Check if level is in cache
+   if (typeof allLevels[levelNum] !== "undefined") {
+      levelObj = allLevels[levelNum];
+      levelReady();
+   } else {   // If not, get suitable file with levels
+      // Calculate filename
+      var fNumber = parseInt(levelNum / 10) * 10;
+      var fName = "levels/" + fNumber + ".txt";
 
-   // Object to return
-   var level = {
-      /*
-         0 - empty space
-         1 - end point
-         2 - curve
-         3 - 3-way connector
-         4 - 4-way connector
-         5 - straight line
-      */
-      data: [
-               [1, 2, 0],
-               [0, 5, 0],
-               [0, 2, 1]
-            ],
-      dimensions: {
-         width: 3,
-         height: 3
-      }
+      // Get file
+      $.getJSON(fName).done(function(data) {
+         // Save levels into cache
+         $(data.levels).each(function(index, value) {
+            allLevels[fNumber] = value;
+            fNumber++;
+         });
+
+         // Make sure that level is available
+         if (typeof allLevels[levelNum] == "undefined") {
+            console.error("Level " + levelNum + " is unavailable");
+            alert("Level " + levelNum + " is unavailable");
+            return;
+         }
+
+         // Level object
+         levelObj = allLevels[levelNum];
+
+         // Random tiles rotation
+         rotateState = [];
+         for (var i = 0; i < levelObj.dimensions.height; i++) {
+            rotateState[i] = [];
+            for (var j = 0; j < levelObj.dimensions.width; j++) {
+               // Get random rotation from 0 to 3
+               rotateState[i][j] = Math.floor(Math.random() * 4);
+            }
+         }
+
+         // Call appropriate function
+         levelReady();
+
+      }).fail(function(d, textStatus, error) {
+         console.error("Failed to download levels from " + fName + ", error: " + error);
+      })
    }
-
-   // Random tiles rotation
-   rotateState = [];
-   for (var i = 0; i < level.dimensions.height; i++) {
-      rotateState[i] = [];
-      for (var j = 0; j < level.dimensions.width; j++) {
-         // Get random rotation from 0 to 3
-         rotateState[i][j] = Math.floor(Math.random() * 4);
-      }
-   }
-
-   // Save result
-   levelObj = level;
 }
 
 /*
@@ -213,18 +226,20 @@ function rotateTile(x, y) {
 
          // Draw tile
          drawTile(x, y, now);
+      },
+      complete: function() {
+         // Call checkLevel() after every rotation
+         var checkState = checkLevel();
+         if (checkState == true) {
+            currentLevel++;
+            getLevel(currentLevel);
+         }
       }
    });
 
    // Protect rotateState to have less than 4
    if (rotateState[y][x] > 3)
       rotateState[y][x] = 0;
-
-   // Call checkLevel() after every rotation
-   var checkState = checkLevel();
-   if (checkState == true) {
-      //alert('Level complete');
-   }
 }
 
 /* Loading SVG images into tiles object */
@@ -348,9 +363,9 @@ function getConnSides(x, y) {
 function checkLevel() {
    // Generate array of all tiles connection sides
    var sides = [];
-   for (var y = 0; y < levelObj.dimensions.width; y++) {
+   for (var y = 0; y < levelObj.dimensions.height; y++) {
       sides[y] = [];
-      for (var x = 0; x < levelObj.dimensions.height; x++) {
+      for (var x = 0; x < levelObj.dimensions.width; x++) {
          sides[y][x] = getConnSides(x, y);
       }
    }
