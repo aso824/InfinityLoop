@@ -406,6 +406,6 @@ function checkLevel() {
    }
 
    // If no error occured, level is complete
-   console.log('checkLevel(): level complete');
+   console.log('checkLevel(): level ' + currentLevel + ' complete');
    return true;
 }
